@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>أسراد ديزاين ستوديو — ASRAD Premium Design Studio</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="canonical" href="https://asrad.design" />
+    <meta property="og:title" content="أسراد ديزاين ستوديو — ASRAD Premium Design Studio" />
+    <meta property="og:description" content="استوديو تصميم فاخر متخصص في بناء الهويات البصرية والمنصات الرقمية للعلامات التجارية الراقية" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://asrad.design" />
+    <meta property="og:image" content="https://asrad.design/images/asrad-logo.png" />
+    <meta property="og:locale" content="ar_SY" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="أسراد ديزاين ستوديو — ASRAD Premium Design Studio" />
+    <meta name="twitter:description" content="استوديو تصميم فاخر متخصص في بناء الهويات البصرية والمنصات الرقمية" />
+    <meta name="twitter:image" content="https://asrad.design/images/asrad-logo.png" />
+    <meta name="theme-color" content="#051613" />
+    <meta name="msapplication-TileColor" content="#051613" />
+    <meta name="description" content="أسراد — استوديو تصميم فاخر متخصص في بناء الهويات البصرية والمنصات الرقمية للعلامات التجارية الراقية" />
+    <link rel="icon" type="image/png" href="images/asrad-logo.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              asrad: {
+                dark: '#051613',
+                forest: '#0E4027',
+                gold: '#C8A053',
+                cream: '#F7F1E5',
+                lightgold: '#EAD093',
+              }
+            },
+            fontFamily: {
+              cinzel: ['Cinzel', 'Playfair Display', 'serif'],
+              tajawal: ['Tajawal', 'sans-serif'],
+              inter: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="style.css" />
+    <!-- GSAP for advanced animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <!-- Three.js for WebGL background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Lenis for smooth scroll -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  </head>
+  <body class="min-h-screen bg-[#051613] text-[#F7F1E5] selection:bg-[#C8A053] selection:text-[#051613] overflow-x-hidden">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+
+    <!-- Custom Luxury Cursor -->
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+    <div id="cursor-trail" aria-hidden="true"></div>
+
+    <!-- Grain Texture Overlay -->
+    <div id="grain-overlay" aria-hidden="true"></div>
+
+    <!-- WebGL Canvas Background -->
+    <canvas id="webgl-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- Golden Ambient Particles -->
+    <div id="particles-container" class="fixed inset-0 pointer-events-none z-10" aria-hidden="true"></div>
+
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="fixed top-24 left-6 z-50 w-10 h-10 rounded-full border border-[#C8A053]/20 bg-[#051613]/80 backdrop-blur-md flex items-center justify-center text-[#C8A053] hover:bg-[#C8A053] hover:text-[#051613] transition-all duration-300 cursor-pointer" aria-label="تبديل الوضع">
+      <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    </button>
+
+    <!-- Audio Toggle -->
+    <button id="audio-toggle" class="fixed top-24 left-20 z-50 w-10 h-10 rounded-full border border-[#C8A053]/20 bg-[#051613]/80 backdrop-blur-md flex items-center justify-center text-[#C8A053] hover:bg-[#C8A053] hover:text-[#051613] transition-all duration-300 cursor-pointer" aria-label="تشغيل الصوت">
+      <svg id="audio-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      </svg>
+    </button>
+
+    <!-- Golden Grain Ambient overlay -->
+    <div class="fixed inset-0 bg-[radial-gradient(ellipse_at_center,rgba(20,80,50,0.08)_0%,transparent_100%)] pointer-events-none z-20"></div>
+    <!-- Scroll Progress Bar -->
+    
+    <!-- Custom Luxury Cursor (desktop only) -->
+    
+    
+    <!-- Grain Texture Overlay -->
+    
+    
+    <!-- Golden Grain Ambient overlay effect across the site -->
+    <div class="fixed inset-0 bg-[radial-gradient(ellipse_at_center,rgba(20,80,50,0.08)_0%,transparent_100%)] pointer-events-none z-30"></div>
+    
+    <!-- Sticky Navigation Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent py-5 lg:py-6">
+      <div class="max-w-[95rem] mx-auto px-4 md:px-8 lg:px-12 flex items-center justify-between gap-2">
+        
+        <!-- Luxury Logo (displays on the Far RIGHT on Desktop/Mobile in RTL) -->
+        <div class="flex items-center flex-shrink-0 z-10">
+          <a href="#hero" class="cursor-pointer flex items-center gap-3 select-none" id="navbar-logo">
+            <!-- SVG Emblem -->
+            <svg 
+              id="asrad-logo-emblem"
+              class="w-10 h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 filter drop-shadow-[0_0_6px_rgba(200,160,83,0.15)] hover:rotate-3 transition-transform duration-500"
+              viewBox="0 0 500 500" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="250" cy="250" r="235" fill="#031A15" stroke="#C8A053" stroke-width="2" />
+              <circle cx="250" cy="250" r="215" stroke="#C8A053" stroke-width="1.5" stroke-opacity="0.6" stroke-dasharray="4 2" />
+              <circle cx="250" cy="250" r="210" stroke="#C8A053" stroke-width="1" stroke-opacity="0.8" />
+              <text x="248" y="225" text-anchor="middle" fill="#F7F1E5" font-size="145" font-family="'Cinzel', 'Playfair Display', serif" font-weight="600" letter-spacing="-12">RA</text>
+              <line x1="140" y1="288" x2="225" y2="288" stroke="#C8A053" stroke-width="1.5" stroke-opacity="0.8" />
+              <line x1="275" y1="288" x2="360" y2="288" stroke="#C8A053" stroke-width="1.5" stroke-opacity="0.8" />
+              <path d="M 250 268 L 242 280 H 246 L 239 294 H 247 L 235 311 H 247 V 323 H 253 V 311 H 265 L 253 294 H 261 L 254 280 H 258 Z" fill="#F7F1E5" />
+              <text x="256" y="378" text-anchor="middle" fill="#F7F1E5" font-size="48" font-family="'Cinzel', 'Playfair Display', serif" font-weight="700" letter-spacing="16">ASRAD</text>
+              <text x="254" y="423" text-anchor="middle" fill="#C8A053" font-size="15" font-family="'Tajawal', sans-serif" font-weight="600" letter-spacing="8">ROOTED IN ELEGANCE</text>
+            </svg>
+            <div class="flex flex-col text-right">
+              <span class="font-cinzel text-lg md:text-xl font-bold tracking-[0.2em] uppercase text-gradient leading-none text-shadow-gold text-[#C8A053]">ASRAD</span>
+              <span class="text-[8px] tracking-[0.35em] uppercase text-[#C8A053]/90 font-mono mt-1">Rooted in Elegance</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Navigation Links (Centered in RTL on Desktop) -->
+        <div class="hidden md:flex items-center gap-1.5 lg:gap-5 xl:gap-8 flex-shrink-0 mx-auto">
+          <a href="#hero" class="nav-link relative py-1.5 text-[11px] lg:text-xs xl:text-[13px] uppercase tracking-wide lg:tracking-widest transition-all duration-300 px-1 lg:px-2 text-[#C8A053] font-semibold" data-section="hero">
+            الرئيسية
+            <span class="nav-indicator absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#C8A053] to-transparent"></span>
+          </a>
+          <a href="#services" class="nav-link relative py-1.5 text-[11px] lg:text-xs xl:text-[13px] uppercase tracking-wide lg:tracking-widest transition-all duration-300 px-1 lg:px-2 text-[#F7F1E5]/70 hover:text-[#F7F1E5]" data-section="services">
+            خدماتنا
+            <span class="nav-indicator absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#C8A053] to-transparent hidden"></span>
+          </a>
+          <a href="#works" class="nav-link relative py-1.5 text-[11px] lg:text-xs xl:text-[13px] uppercase tracking-wide lg:tracking-widest transition-all duration-300 px-1 lg:px-2 text-[#F7F1E5]/70 hover:text-[#F7F1E5]" data-section="works">
+            أعمالنا
+            <span class="nav-indicator absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#C8A053] to-transparent hidden"></span>
+          </a>
+          <a href="#about" class="nav-link relative py-1.5 text-[11px] lg:text-xs xl:text-[13px] uppercase tracking-wide lg:tracking-widest transition-all duration-300 px-1 lg:px-2 text-[#F7F1E5]/70 hover:text-[#F7F1E5]" data-section="about">
+            من نحن
+            <span class="nav-indicator absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#C8A053] to-transparent hidden"></span>
+          </a>
+          <a href="#contact" class="nav-link relative py-1.5 text-[11px] lg:text-xs xl:text-[13px] uppercase tracking-wide lg:tracking-widest transition-all duration-300 px-1 lg:px-2 text-[#F7F1E5]/70 hover:text-[#F7F1E5]" data-section="contact">
+            تواصل معنا
+            <span class="nav-indicator absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#C8A053] to-transparent hidden"></span>
+          </a>
+        </div>
+
+        <!-- Action Button & Call details (Far LEFT in RTL on Desktop) -->
+        <div class="hidden md:flex items-center gap-2.5 lg:gap-4 xl:gap-6 flex-shrink-0">
+          <a 
+            href="#contact" 
+            class="relative px-3 lg:px-5 xl:px-6 py-2 lg:py-2.5 rounded-full overflow-hidden text-[10px] lg:text-xs font-bold tracking-wide uppercase border border-[#C8A053]/30 text-[#C8A053] hover:text-[#F7F1E5] transition-colors duration-300 flex items-center gap-1.5 group cursor-pointer text-nowrap shimmer-hover"
+          >
+            <span class="relative z-10 font-bold">لتبدأ مشروعك</span>
+            <i data-lucide="arrow-up-right" class="w-3 h-3 lg:w-3.5 lg:h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300"></i>
+            <div class="absolute inset-0 bg-[#C8A053] opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+          </a>
+
+          <a 
+            href="tel:+963935878256"
+            class="flex items-center gap-1 lg:gap-2 text-[#F7F1E5]/70 hover:text-[#C8A053] transition-colors duration-300 text-[10px] lg:text-xs font-mono text-nowrap"
+          >
+            <i data-lucide="phone" class="w-3 lg:w-3.5 lg:h-3.5 text-[#C8A053]"></i>
+            <span dir="ltr">+963 935 878 256</span>
+          </a>
+        </div>
+
+        <!-- Mobile Hamburger Toggle Menu -->
+        <div class="flex md:hidden items-center gap-3">
+          <a 
+            href="tel:+963935878256" 
+            class="p-1.5 rounded-full border border-[#C8A053]/15 text-[#C8A053]"
+          >
+            <i data-lucide="phone" class="w-4 h-4"></i>
+          </a>
+          <button
+            id="mobile-nav-toggle"
+            class="p-1.5 text-[#F7F1E5] hover:text-[#C8A053] transition-colors focus:outline-none cursor-pointer"
+            aria-label="Toggle Menu"
+          >
+            <i id="hamburger-icon" data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- Mobile Drawer Overlay Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-[#051613] flex flex-col md:hidden pt-28 px-8 pb-10 transition-all duration-500 ease-in-out translate-x-full opacity-0 pointer-events-none">
+      <!-- Background texture art -->
+      <div class="absolute inset-0 bg-gold-radial opacity-30 pointer-events-none"></div>
+      
+      <div class="flex flex-col gap-6 text-right z-10">
+        <span class="text-xs uppercase tracking-widest text-[#C8A053] font-mono border-b border-[#C8A053]/10 pb-2">
+          القائمة الرئيسية
+        </span>
+        <a href="#hero" class="mobile-navlink text-xl font-medium tracking-wide text-right cursor-pointer py-1 text-[#C8A053] pr-2 border-r-2 border-[#C8A053]" data-section="hero">الرئيسية</a>
+        <a href="#services" class="mobile-navlink text-xl font-medium tracking-wide text-right cursor-pointer py-1 text-[#F7F1E5]" data-section="services">خدماتنا</a>
+        <a href="#works" class="mobile-navlink text-xl font-medium tracking-wide text-right cursor-pointer py-1 text-[#F7F1E5]" data-section="works">أعمالنا</a>
+        <a href="#about" class="mobile-navlink text-xl font-medium tracking-wide text-right cursor-pointer py-1 text-[#F7F1E5]" data-section="about">من نحن</a>
+        <a href="#contact" class="mobile-navlink text-xl font-medium tracking-wide text-right cursor-pointer py-1 text-[#F7F1E5]" data-section="contact">تواصل معنا</a>
+      </div>
+
+      <div class="mt-auto flex flex-col gap-6 z-10 border-t border-[#C8A053]/10 pt-6">
+        <div class="text-right">
+          <span class="block text-[10px] uppercase tracking-widest text-[#C8A053] font-mono mb-1">تواصل مباشر</span>
+          <a href="tel:+963935878256" class="text-lg text-[#F7F1E5] hover:text-[#C8A053]" dir="ltr">+963 935 878 256</a>
+        </div>
+        
+        <div class="text-right">
+          <span class="block text-[10px] uppercase tracking-widest text-[#C8A053] font-mono mb-1">البريد الإلكتروني</span>
+          <a href="mailto:asrad901@gmail.com" class="text-[#F7F1E5] hover:text-[#C8A053]">asrad901@gmail.com</a>
+        </div>
+
+        <a
+          href="#contact"
+          id="mobile-nav-cta"
+          class="w-full py-3.5 text-center rounded-xl bg-gradient-to-r from-[#C8A053] to-[#EAD093] text-[#051613] font-bold text-sm tracking-wide shadow-lg shadow-[#C8A053]/10 block shimmer-hover"
+        >
+          اصنع هويتك الآن
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero Slider / Storytelling Section -->
+    <section id="hero" class="relative min-h-[95vh] flex items-center justify-center pt-24 overflow-hidden bg-forest-gradient">
+      <!-- Absolute Geometric Ornaments -->
+      <div class="absolute inset-0 bg-gold-radial opacity-40 pointer-events-none"></div>
+      <div class="absolute top-[35%] right-[5%] w-[400px] h-[400px] rounded-full bg-[#0E4027]/15 filter blur-3xl orb-float"></div>
+      <div class="absolute bottom-[20%] left-[10%] w-[350px] h-[350px] rounded-full bg-[#C8A053]/5 filter blur-3xl orb-float-slow"></div>
+
+      <!-- Grid Mesh Background -->
+      <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(to right, #C8A053 1px, transparent 1px), linear-gradient(to bottom, #C8A053 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+      <!-- Content Container -->
+      <div class="max-w-7xl mx-auto px-6 md:px-12 w-full pt-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 text-right">
+        
+        <!-- Left Side: Interactive Mockup Image Frame / Slider -->
+        <div class="lg:col-span-6 w-full flex flex-col items-center justify-center h-full">
+          <div class="relative w-full max-w-[500px] aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl border border-[#C8A053]/20 gold-foil-border bg-[#051613] hero-image-enter">
+            <!-- Gradient background overlays -->
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-[#051613] via-transparent to-transparent z-10 pointer-events-none"></div>
+
+            <!-- Slide Images inside Card -->
+            <div id="slide-container" class="absolute inset-0 w-full h-full">
+              <!-- Slides will be injected or active toggled here -->
+              <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-100" data-index="0">
+                <img src="images/milan_brand_1.png" alt="مـيـلان" class="w-full h-full object-cover select-none ken-burns" referrerPolicy="no-referrer" / loading="eager">
+              </div>
+              <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0" data-index="1">
+                <img src="images/taraf_luxury_brand_3.png" alt="مجموعة الترف العالمية" class="w-full h-full object-cover select-none ken-burns" referrerPolicy="no-referrer" / loading="eager">
+              </div>
+              <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0" data-index="2">
+                <img src="images/rowdah_web_1.png" alt="الروضة" class="w-full h-full object-cover select-none ken-burns" referrerPolicy="no-referrer" / loading="eager">
+              </div>
+              <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0" data-index="3">
+                <img src="images/joud_social_1.png" alt="جـيـود" class="w-full h-full object-cover select-none ken-burns" referrerPolicy="no-referrer" / loading="eager">
+              </div>
+            </div>
+
+            <!-- Active slide ribbon tag -->
+            <div id="slide-tag" class="absolute top-4 left-4 z-20 bg-[#0E4027]/95 backdrop-blur-md border border-[#C8A053]/30 text-[#C8A053] px-3.5 py-1 rounded-full text-[10px] tracking-widest font-mono font-medium shadow-md">
+              العلامة الفاخرة لعام 2025
+            </div>
+
+            <!-- Slider overlay navigation controls -->
+            <div class="absolute bottom-6 left-6 right-6 z-20 flex items-center justify-between bg-[#051613]/85 backdrop-blur-md p-4 rounded-xl border border-[#C8A053]/10">
+              <div class="text-right">
+                <span id="slide-logo-label" class="block text-[10px] uppercase font-mono tracking-wider text-[#C8A053]/70">المشروع المميز / MILAN</span>
+                <span class="block text-sm font-semibold text-[#F7F1E5] mt-1">
+                  <span id="slide-title-label">مـيـلان</span> 
+                  <span class="text-[#C8A053] font-mono text-xs">| <span id="slide-subtitle-label">العطور الفاخرة عيار ٢٤</span></span>
+                </span>
+              </div>
+              <div class="flex gap-2">
+                <button 
+                  id="hero-slide-prev"
+                  class="w-8 h-8 rounded-full border border-[#C8A053]/25 flex items-center justify-center text-[#C8A053] hover:bg-[#C8A053] hover:text-[#051613] transition-all duration-300 cursor-pointer"
+                  aria-label="Previous Slide"
+                >
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+                <button 
+                  id="hero-slide-next"
+                  class="w-8 h-8 rounded-full border border-[#C8A053]/25 flex items-center justify-center text-[#C8A053] hover:bg-[#C8A053] hover:text-[#051613] transition-all duration-300 cursor-pointer"
+                  aria-label="Next Slide"
+                >
+                  <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Jump slide bullet buttons -->
+          <div class="flex items-center gap-3 mt-6">
+            <button class="hero-dot-btn transition-all duration-300 cursor-pointer flex flex-col items-center" data-index="0">
+              <span class="text-[10px] font-medium block px-3 py-1 rounded-full border bg-[#C8A053] text-[#051613] border-[#C8A053]">مـيـلان</span>
+            </button>
+            <button class="hero-dot-btn transition-all duration-300 cursor-pointer flex flex-col items-center" data-index="1">
+              <span class="text-[10px] font-medium block px-3 py-1 rounded-full border bg-[#0E4027]/10 text-[#F7F1E5]/50 border-white/5 hover:border-[#C8A053]/30 hover:text-[#C8A053]">مجموعة الترف العالمية</span>
+            </button>
+            <button class="hero-dot-btn transition-all duration-300 cursor-pointer flex flex-col items-center" data-index="2">
+              <span class="text-[10px] font-medium block px-3 py-1 rounded-full border bg-[#0E4027]/10 text-[#F7F1E5]/50 border-white/5 hover:border-[#C8A053]/30 hover:text-[#C8A053]">الروضة</span>
+            </button>
+            <button class="hero-dot-btn transition-all duration-300 cursor-pointer flex flex-col items-center" data-index="3">
+              <span class="text-[10px] font-medium block px-3 py-1 rounded-full border bg-[#0E4027]/10 text-[#F7F1E5]/50 border-white/5 hover:border-[#C8A053]/30 hover:text-[#C8A053]">جـيـود</span>
+            </button>
+          </div>
+
+          <!-- Trust Shield indicator -->
+          <div class="flex items-center gap-2.5 mt-4 text-[10px] font-mono uppercase tracking-[0.2em] text-[#C8A053]/60 bg-[#C8A053]/5 px-4 py-1.5 rounded-full border border-[#C8A053]/5">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#C8A053]"></i>
+            <span>تصميم وبناء معماري مستدام للهوية</span>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Narrative & Slogan values -->
+        <div class="lg:col-span-6 flex flex-col justify-center text-right">
+          
+          <!-- Gold Accent label -->
+          <div class="inline-flex self-end items-center gap-2 bg-[#0E4027]/40 border border-[#C8A053]/30 px-4 py-1.5 rounded-full mb-6 shadow-inner reveal-item">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#C8A053]"></i>
+            <span class="text-xs text-[#F7F1E5] font-semibold tracking-wider font-sans">أسراد ديزاين ستوديو — أفكار تتأصل وتدوم</span>
+          </div>
+
+          <!-- Slogan Roman sub -->
+          <h2 class="font-cinzel text-sm block tracking-[0.3em] uppercase font-bold mb-4 font-mono select-none shimmer-text">ASRAD — ROOTED IN ELEGANCE</h2>
+
+          <!-- Main Slogan Header Title -->
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-sans tracking-tight leading-[115%] mb-6" id="hero-title">
+            <span class="hero-char">نحول الأفكار إلى</span><br />
+            <span class="gold-text-gradient block font-extrabold mt-1 hero-char">هويات راسخة</span>
+          </h1>
+
+          <!-- Studio Brief text story -->
+          <p class="text-base text-[#F7F1E5]/80 leading-relaxed max-w-xl self-end mb-10 text-justify">
+            أسراد هو استوديو تصميم إبداعي فاخر، ينطلق من فلسفة راسخة تبحث عن الجوهر المعماري والهندسي للمفاهيم الإبداعية. نحن لا نكتفي بإنشاء التصاميم، بل نعمل كمعماريين للهويات والوعي التجاري، لنمنح علامتك الفخامة والخلود التي تستحقها في عالم الغد.
+          </p>
+
+          <!-- Core Call Actions buttons -->
+          <div class="flex flex-col sm:flex-row-reverse gap-4 justify-start">
+            <a
+              href="#contact"
+              class="px-8 py-4 rounded-xl bg-gradient-to-r from-[#C8A053] to-[#EAD093] text-[#051613] font-extrabold text-sm tracking-wider shadow-lg shadow-[#C8A053]/20 flex items-center justify-center gap-2 hover:brightness-105 active:scale-[0.98] transition-all duration-300 btn-ripple"
+            >
+              <span>دليل البدء / لتبدأ مشروعك</span>
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            </a>
+
+            <a
+              href="#works"
+              class="px-8 py-4 rounded-xl bg-[#0E4027]/40 text-[#C8A053] border border-[#C8A053]/25 font-bold text-sm tracking-wider hover:bg-[#0E4027]/75 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <span>استكشف صالة المخرجات الإبداعية</span>
+            </a>
+          </div>
+
+          <!-- Live Indicator status metadata -->
+          <div class="mt-12 flex justify-end gap-6 border-t border-[#C8A053]/10 pt-6 text-[11px] font-mono text-[#F7F1E5]/60">
+            <div class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>دمشق / الجمهورية العربية السورية</span>
+            </div>
+            <div>
+              <span class="text-[#C8A053]/70 font-bold ml-1">المهمة:</span>
+              <span>هوية تدوم للأبد</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Decorative Golden Line Divider -->
+    <div class="w-full flex justify-center py-2 bg-[#051613]">
+      <div class="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#C8A053]/20 to-transparent"></div>
+    </div>
+
+    <!-- Milestone Stats Bar Section -->
+    <section id="stats" class="relative py-16 bg-[#051613] border-y border-[#C8A053]/15 overflow-hidden">
+      <!-- Background glow -->
+      <div class="absolute inset-x-0 top-0 h-full bg-gold-radial opacity-15 pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x md:divide-x-reverse divide-[#C8A053]/15 text-center">
+          
+          <!-- Stat 1 -->
+          <div class="flex flex-col items-center justify-center py-6 px-4 group hover:bg-[#0E4027]/10 transition-colors duration-300 rounded-xl card-lift reveal-item">
+            <div class="mb-4 p-3 rounded-full bg-[#0E4027]/30 border border-[#C8A053]/10 group-hover:border-[#C8A053]/40 group-hover:scale-110 transition-all duration-300">
+              <i data-lucide="award" class="w-6 h-6 text-[#C8A053]"></i>
+            </div>
+            <span class="font-cinzel text-4xl lg:text-5xl font-extrabold text-[#C8A053] tracking-widest text-shadow-gold font-mono stat-counter" data-target="200" data-suffix="+">200+</span>
+            <span class="block text-base font-bold text-[#F7F1E5] mt-3 tracking-wide">اتفاقية للمخرجات الفاخرة</span>
+            <span class="block text-xs text-[#F7F1E5]/60 mt-1 max-w-xs leading-relaxed">شراكات مبنية على الثقة المتبادلة والتميز المطلق</span>
+          </div>
+
+          <!-- Stat 2 -->
+          <div class="flex flex-col items-center justify-center py-6 px-4 group hover:bg-[#0E4027]/10 transition-colors duration-300 rounded-xl card-lift reveal-item">
+            <div class="mb-4 p-3 rounded-full bg-[#0E4027]/30 border border-[#C8A053]/10 group-hover:border-[#C8A053]/40 group-hover:scale-110 transition-all duration-300">
+              <i data-lucide="globe" class="w-6 h-6 text-[#C8A053]"></i>
+            </div>
+            <span class="font-cinzel text-4xl lg:text-5xl font-extrabold text-[#C8A053] tracking-widest text-shadow-gold font-mono stat-counter" data-target="300" data-suffix="+">300+</span>
+            <span class="block text-base font-bold text-[#F7F1E5] mt-3 tracking-wide">تجربة فريدة للماركات الرقمية</span>
+            <span class="block text-xs text-[#F7F1E5]/60 mt-1 max-w-xs leading-relaxed">بناء هويات متكاملة تخاطب ذائقة النخبة والرواد</span>
+          </div>
+
+          <!-- Stat 3 -->
+          <div class="flex flex-col items-center justify-center py-6 px-4 group hover:bg-[#0E4027]/10 transition-colors duration-300 rounded-xl card-lift reveal-item">
+            <div class="mb-4 p-3 rounded-full bg-[#0E4027]/30 border border-[#C8A053]/10 group-hover:border-[#C8A053]/40 group-hover:scale-110 transition-all duration-300">
+              <i data-lucide="compass" class="w-6 h-6 text-[#C8A053]"></i>
+            </div>
+            <span class="font-cinzel text-4xl lg:text-5xl font-extrabold text-[#C8A053] tracking-widest text-shadow-gold font-mono">1-1</span>
+            <span class="block text-base font-bold text-[#F7F1E5] mt-3 tracking-wide">منهجية المصممات والمصممين الخاصة</span>
+            <span class="block text-xs text-[#F7F1E5]/60 mt-1 max-w-xs leading-relaxed">التوجيه الحصري والتواصل المباشر مع عقول صناعة الفن</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Services Specialties Section -->
+    <section id="services" class="relative py-28 bg-[#051613] overflow-hidden">
+      <!-- Background glows -->
+      <div class="absolute top-[10%] left-0 w-[400px] h-[400px] rounded-full bg-[#0E4027]/10 filter blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-[10%] right-0 w-[400px] h-[400px] rounded-full bg-[#C8A053]/5 filter blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        
+        <!-- Section Header -->
+        <div class="text-center mb-20 reveal-item">
+          <span class="font-cinzel text-xs font-bold tracking-[0.3em] text-[#C8A053] block uppercase mb-3">EXPLORE OUR SPECIALTIES — خِدماتُنا الراقِية</span>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight">نصنع المعايير ولا ننافس أحداً</h2>
+          <div class="w-16 h-[2px] bg-[#C8A053] mx-auto mt-4"></div>
+          <p class="text-sm text-[#F7F1E5]/60 mt-4 max-w-xl mx-auto">من دقة الشعار الهندسي إلى تفاعل شفرات الويب، جميع أعمالنا تُنفّذ بشغف معماري يُراعي متطلبات الجودة المعاصرة وقيم الأصالة.</p>
+        </div>
+
+        <!-- Dynamic Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          <!-- Column 1: Interactive Detail Block (Left) -->
+          <div class="lg:col-span-6 flex flex-col gap-6" id="service-detail-container">
+            <div class="w-full rounded-2xl overflow-hidden border border-[#C8A053]/15 gold-foil-border bg-[#051613] shadow-xl p-6 md:p-8 transition-all duration-500 tilt-card" id="service-detail-card">
+              
+              <!-- Service Representation image -->
+              <div class="h-48 md:h-[260px] rounded-xl overflow-hidden mb-6 relative group">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#051613]/80 via-transparent to-transparent z-10"></div>
+                <img 
+                  id="service-detail-image"
+                  src="images/ASRAD-1.png" 
+                  alt="دراسة واستكشاف كينونة العلامة ورسم الفلسفة" 
+                  class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  referrerPolicy="no-referrer"
+                / loading="lazy">
+                <div class="absolute bottom-4 right-4 z-20 flex items-center gap-2 bg-[#051613]/90 backdrop-blur-sm border border-[#C8A053]/20 px-3 py-1 rounded-lg">
+                  <i id="service-detail-icon" data-lucide="compass" class="w-4 h-4 text-[#C8A053]"></i>
+                  <span class="text-xs font-semibold text-[#C8A053]">معاينة مخرج الخدمة</span>
+                </div>
+              </div>
+
+              <!-- Title & Desc -->
+              <h3 id="service-detail-title" class="text-xl font-bold text-[#F7F1E5] mb-3">دراسة واستكشاف كينونة العلامة ورسم الفلسفة</h3>
+              <p id="service-detail-desc" class="text-sm text-[#F7F1E5]/80 leading-relaxed mb-6 text-justify">
+                نبحث في الجذور والوجدان المعرفي لكل منشأة؛ لنستلهم قصة عميقة، فلسفة مستدامة، ومقومات جمالية تصنع اتجاهاً فنياً يستقطب النخبة.
+              </p>
+
+              <!-- Feature bullet output logs -->
+              <div class="border-t border-[#C8A053]/10 pt-5">
+                <span class="block text-xs font-bold text-[#C8A053] tracking-wider mb-4 font-mono uppercase">باقة المخرجات التفصيلية المكتملة</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-right" id="service-detail-bullets">
+                  <div class="flex items-start gap-2 text-xs text-[#F7F1E5]/90">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-[#C8A053] shrink-0 mt-0.5"></i>
+                    <span>تحديد السرد الفلسفي والتوجه الفكري والمقومات الكلاسيكية.</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-xs text-[#F7F1E5]/90">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-[#C8A053] shrink-0 mt-0.5"></i>
+                    <span>صيغة اسم العلامة ونبرة صوتها التعبيرية الراقية الهيبة.</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-xs text-[#F7F1E5]/90">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-[#C8A053] shrink-0 mt-0.5"></i>
+                    <span>تصميم وبناء لوحات الإلهام (Moodboards) والمحاكاة الجمالية.</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-xs text-[#F7F1E5]/90">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-[#C8A053] shrink-0 mt-0.5"></i>
+                    <span>توفير مشاورات مباشرة ١-١ لرسم استراتيجية رصينة ومدروسة.</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Column 2: Selection side listing (Right) -->
+          <div class="lg:col-span-6 flex flex-col gap-4">
+            <span class="block text-right text-xs uppercase tracking-widest text-[#C8A053] font-mono mb-2">اختر الخدمة لاستكشاف التفاصيل</span>
+            
+            <!-- Service item 1 -->
+            <button
+              class="service-select-btn w-full text-right p-5 md:p-6 rounded-xl border transition-all duration-300 relative overflow-hidden flex items-center gap-4 group cursor-pointer bg-[#0E4027]/40 border-[#C8A053]/40 shadow-md shadow-[#C8A053]/5 is-active reveal-item"
+              data-id="brand-research"
+            >
+              <div class="absolute inset-0 bg-gradient-to-l from-[#C8A053]/5 to-transparent pointer-events-none active-service-glow"></div>
+
+              <!-- FIXED: Icon box with fixed dimensions for perfect alignment -->
+              <div class="service-icon-box w-12 h-12 flex items-center justify-center rounded-lg border transition-all duration-300 bg-[#C8A053] text-[#051613] border-[#C8A053] shrink-0">
+                <i data-lucide="compass" class="w-5 h-5"></i>
+              </div>
+
+              <!-- Text content -->
+              <div class="flex-1 min-w-0">
+                <h4 class="service-item-title text-base font-bold text-[#C8A053] transition-colors">دراسة واستكشاف كينونة العلامة ورسم الفلسفة</h4>
+                <p class="text-xs text-[#F7F1E5]/50 mt-1 line-clamp-1">نبحث في الجذور والوجدان المعرفي لكل منشأة؛ لنستلهم قصة عميقة وفلسفة مستدامة.</p>
+              </div>
+
+              <!-- FIXED: Arrow indicator with consistent positioning -->
+              <div class="arrow-indicator-wrapper w-6 h-6 flex items-center justify-center shrink-0">
+                <i data-lucide="chevron-left" class="arrow-icon w-4 h-4 text-[#C8A053] transition-all duration-300 opacity-100 translate-x-0"></i>
+              </div>
+            </button>
+
+            <!-- Service item 2 -->
+            <button
+              class="service-select-btn w-full text-right p-5 md:p-6 rounded-xl border transition-all duration-300 relative overflow-hidden flex items-center gap-4 group cursor-pointer bg-[#0E4027]/10 border-[#C8A053]/10 hover:border-[#C8A053]/25 hover:bg-[#0E4027]/20"
+              data-id="logo-geometry"
+            >
+              <div class="absolute inset-0 bg-gradient-to-l from-[#C8A053]/5 to-transparent pointer-events-none active-service-glow hidden"></div>
+
+              <div class="service-icon-box w-12 h-12 flex items-center justify-center rounded-lg border transition-all duration-300 bg-[#051613] text-[#C8A053] border-[#C8A053]/15">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 class="service-item-title text-base font-bold text-[#F7F1E5] transition-colors">تصميم التمائم والشعارات الهندسية</h4>
+                <p class="text-xs text-[#F7F1E5]/50 mt-1 line-clamp-1">نصمم تمائم متفردة تعتمد على تناغم الأشكال ونسب النسبة الذهبية الكلاسيكية.</p>
+              </div>
+
+              <div class="arrow-indicator-wrapper w-6 h-6 flex items-center justify-center shrink-0">
+                <i data-lucide="chevron-left" class="arrow-icon w-4 h-4 text-[#C8A053] transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"></i>
+              </div>
+            </button>
+
+            <!-- Service item 3 -->
+            <button
+              class="service-select-btn w-full text-right p-5 md:p-6 rounded-xl border transition-all duration-300 relative overflow-hidden flex items-center gap-4 group cursor-pointer bg-[#0E4027]/10 border-[#C8A053]/10 hover:border-[#C8A053]/25 hover:bg-[#0E4027]/20"
+              data-id="brand-guidelines"
+            >
+              <div class="absolute inset-0 bg-gradient-to-l from-[#C8A053]/5 to-transparent pointer-events-none active-service-glow hidden"></div>
+
+              <div class="service-icon-box w-12 h-12 flex items-center justify-center rounded-lg border transition-all duration-300 bg-[#051613] text-[#C8A053] border-[#C8A053]/15">
+                <i data-lucide="origami" class="w-5 h-5"></i>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 class="service-item-title text-base font-bold text-[#F7F1E5] transition-colors">أدلة الهوية العلوية ونظم الطباعة وتحديد الخطوط</h4>
+                <p class="text-xs text-[#F7F1E5]/50 mt-1 line-clamp-1">نجمع تفاصيل هويتك في دليل كامل من طراز فاخر يحدد قواعد الاستخدام.</p>
+              </div>
+
+              <div class="arrow-indicator-wrapper w-6 h-6 flex items-center justify-center shrink-0">
+                <i data-lucide="chevron-left" class="arrow-icon w-4 h-4 text-[#C8A053] transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"></i>
+              </div>
+            </button>
+
+            <!-- Service item 4 -->
+            <button
+              class="service-select-btn w-full text-right p-5 md:p-6 rounded-xl border transition-all duration-300 relative overflow-hidden flex items-center gap-4 group cursor-pointer bg-[#0E4027]/10 border-[#C8A053]/10 hover:border-[#C8A053]/25 hover:bg-[#0E4027]/20"
+              data-id="sensory-packaging"
+            >
+              <div class="absolute inset-0 bg-gradient-to-l from-[#C8A053]/5 to-transparent pointer-events-none active-service-glow hidden"></div>
+
+              <div class="service-icon-box w-12 h-12 flex items-center justify-center rounded-lg border transition-all duration-300 bg-[#051613] text-[#C8A053] border-[#C8A053]/15">
+                <i data-lucide="pen-tool" class="w-5 h-5"></i>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 class="service-item-title text-base font-bold text-[#F7F1E5] transition-colors">التطبيق الحسي وتصميم قوالب تغليف المنتجات</h4>
+                <p class="text-xs text-[#F7F1E5]/50 mt-1 line-clamp-1">نحول هويتك إلى تلمسات حسية ملموسة كالعبوات والختم الحراري بالذهب.</p>
+              </div>
+
+              <div class="arrow-indicator-wrapper w-6 h-6 flex items-center justify-center shrink-0">
+                <i data-lucide="chevron-left" class="arrow-icon w-4 h-4 text-[#C8A053] transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"></i>
+              </div>
+            </button>
+
+            <!-- Service item 5 -->
+            <button
+              class="service-select-btn w-full text-right p-5 md:p-6 rounded-xl border transition-all duration-300 relative overflow-hidden flex items-center gap-4 group cursor-pointer bg-[#0E4027]/10 border-[#C8A053]/10 hover:border-[#C8A053]/25 hover:bg-[#0E4027]/20"
+              data-id="digital-outlook"
+            >
+              <div class="absolute inset-0 bg-gradient-to-l from-[#C8A053]/5 to-transparent pointer-events-none active-service-glow hidden"></div>
+
+              <div class="service-icon-box w-12 h-12 flex items-center justify-center rounded-lg border transition-all duration-300 bg-[#051613] text-[#C8A053] border-[#C8A053]/15">
+                <i data-lucide="cpu" class="w-5 h-5"></i>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 class="service-item-title text-base font-bold text-[#F7F1E5] transition-colors">المواءمة والامتداد البصري الرقمي للهوية</h4>
+                <p class="text-xs text-[#F7F1E5]/50 mt-1 line-clamp-1">نوجه اتساق الهوية البصرية ليتكامل بهدوء مع القنوات الرقمية وموقع الويب.</p>
+              </div>
+
+              <div class="arrow-indicator-wrapper w-6 h-6 flex items-center justify-center shrink-0">
+                <i data-lucide="chevron-left" class="arrow-icon w-4 h-4 text-[#C8A053] transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"></i>
+              </div>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Decorative Golden Line Divider -->
+    <div class="w-full flex justify-center py-2 bg-[#051613]">
+      <div class="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#C8A053]/15 to-transparent"></div>
+    </div>
+
+    <!-- Masonry Works Showcase Section -->
+    <section id="works" class="relative py-28 bg-[#051613]">
+      <div class="absolute inset-0 bg-gold-radial opacity-20 pointer-events-none"></div>
+
+      <div class="max-w-[95rem] mx-auto px-6 md:px-12 relative z-10">
+        
+        <!-- Section Header works -->
+        <div class="flex flex-col md:flex-row-reverse md:items-end justify-between gap-6 mb-16 border-b border-[#C8A053]/15 pb-8">
+          <div class="text-right">
+            <span class="font-cinzel text-xs font-bold tracking-[0.3em] text-[#C8A053] block uppercase mb-3">CREATIVE LOGBOOK — أَعْمَالُنَا الإِبْدَاعِيَّة</span>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight">أصالة تتجلى في تفاصيل المخرجات</h2>
+            <p class="text-sm text-[#F7F1E5]/60 mt-3 max-w-xl">تصفح معارض الهويات الراقية والمنصات التفاعلية المصممة بأعلى معايير الحرفة الهندسية لشركاء النجاح في المملكة وخارجها.</p>
+          </div>
+
+          <!-- Filtering Ribbon Tabs -->
+          <div class="flex flex-wrap gap-2 justify-end md:justify-start">
+            <button class="works-filter-tab px-5 py-2 rounded-full text-xs font-bold tracking-wide transition-all duration-300 relative overflow-hidden cursor-pointer bg-[#C8A053] text-[#051613] shadow-md shadow-[#C8A053]/10" data-filter="all">الكل</button>
+            <button class="works-filter-tab px-5 py-2 rounded-full text-xs font-medium tracking-wide transition-all duration-300 relative overflow-hidden cursor-pointer bg-[#0E4027]/20 border border-[#C8A053]/10 text-[#F7F1E5]/70 hover:text-[#C8A053] hover:border-[#C8A053]/25" data-filter="visual-identity">الهوية البصرية</button>
+            <button class="works-filter-tab px-5 py-2 rounded-full text-xs font-medium tracking-wide transition-all duration-300 relative overflow-hidden cursor-pointer bg-[#0E4027]/20 border border-[#C8A053]/10 text-[#F7F1E5]/70 hover:text-[#C8A053] hover:border-[#C8A053]/25" data-filter="web">مواقع إلكترونية</button>
+            <button class="works-filter-tab px-5 py-2 rounded-full text-xs font-medium tracking-wide transition-all duration-300 relative overflow-hidden cursor-pointer bg-[#0E4027]/20 border border-[#C8A053]/10 text-[#F7F1E5]/70 hover:text-[#C8A053] hover:border-[#C8A053]/25" data-filter="social">سوشال ميديا</button>
+            <button class="works-filter-tab px-5 py-2 rounded-full text-xs font-medium tracking-wide transition-all duration-300 relative overflow-hidden cursor-pointer bg-[#0E4027]/20 border border-[#C8A053]/10 text-[#F7F1E5]/70 hover:text-[#C8A053] hover:border-[#C8A053]/25" data-filter="ads">إعلانات</button>
+          </div>
+        </div>
+
+        <!-- Bento Majestic Asymmetric Grid of Works -->
+        <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 transition-all duration-500">
+          
+          <!-- Card 1: Milan -->
+          <div class="work-card col-span-1 md:col-span-2 lg:col-span-8 group relative cursor-pointer transition-all duration-500 reveal-item" data-id="milan" data-category="visual-identity">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/milan_brand_2.png" alt="نـظـام الـهـويـة والـصـيـاغـة لـعـطـور مـيـلان" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">الهوية البصرية واللوجو</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">شركة ميلان المحدودة — 2025</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">نـظـام الـهـويـة والـصـيـاغـة لـعـطـور مـيـلان</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">تم تصميم النظام البصري الكامل لزجاجات وتغليف عطور ميلان. تظهر الصورة لوحة اختبار الخطوط الكلاسيكية (Serif) ونسب طلاء الذهب عيار ٢٤ قيراط.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Milan Stationery — pairs with Milan as 8/4 row -->
+          <div class="work-card col-span-1 md:col-span-1 lg:col-span-4 group relative cursor-pointer transition-all duration-500" data-id="milan-digital" data-category="social">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/milan_digital_1.png" alt="مـطـبـوعـات ودلائـل الـغـايـلايـن الـمـتـكـامـلـة لـمـيـلانو" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">سوشال ميديا</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">شركة ميلانو المحدودة — 2025</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">مـطـبـوعـات ودلائـل الـغـايـلايـن الـمـتـكـامـلـة لـمـيـلانو</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">كتاب الهوية البصرية المطبوع ونماذج قوالب التغليف والعلب الخضراء المعتمدة لعطور ميلان.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Taraf -->
+          <div class="work-card col-span-1 md:col-span-2 lg:col-span-8 group relative cursor-pointer transition-all duration-500" data-id="luxury-exp" data-category="ads">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/taraf_luxury_brand_2.png" alt="مـخـرجـات ودلائـل حـمـلـة الـتـرف الـسـيـنـمـائـيـة" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">إعلانات وإخراج</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">مجموعة الترف العالمية — 2024</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">مـخـرجـات ودلائـل حـمـلـة الـتـرف الـسـيـنـمـائـيـة</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">صياغة كتيب التوجيه الفني والسينمائي المتكامل لحملة الترف. تم رصد فلسفة الظل والضوء ونسب الكتلة الهندسية المنحوتة.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Rowdah -->
+          <div class="work-card col-span-1 md:col-span-1 lg:col-span-4 group relative cursor-pointer transition-all duration-500" data-id="rowdah" data-category="web">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/rowdah_web_3.png" alt="الـمـنـصـة الـتـفـاعـلـيـة لـطـيـف الـروضـة" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">مواقع إلكترونية</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">الروضة للتطوير والاستثمار — 2025</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">الـمـنـصـة الـتـفـاعـلـيـة لـطـيـف الـروضـة</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">تصميم وبناء المنصة الرقمية التفاعلية للقصور والفلل السكنية الراقية. يظهر التصميم شاشة التابلت مع خطوط البناء التخطيطية وأدوات القياس النحاسية الذهبية المدمجة.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Joud -->
+          <div class="work-card col-span-1 md:col-span-2 lg:col-span-8 group relative cursor-pointer transition-all duration-500" data-id="joud" data-category="social">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/joud_social_2.png" alt="الـهـويـة الـتـنـظـيـمـيـة لـشـبـكـة جـالـيـري جـيـود" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">سوشال ميديا</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">جاليري جيود المعاصر — 2025</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">الـهـويـة الـتـنـظـيـمـيـة لـشـبـكـة جـالـيـري جـيـود</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">تنسيق قنوات التواصل الاجتماعي وصنع الدليل الجمالي الاستراتيجي لشبكة انستجرام في جاليري جيود. تبين الصورة لوحات القياس والمساحات السلبية الطينية الإيفوارية والمنشورات.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6: Aurum -->
+          <div class="work-card col-span-1 md:col-span-1 lg:col-span-4 group relative cursor-pointer transition-all duration-500" data-id="aurum" data-category="web">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/aurum_1.png" alt="الـتـمـوضـع الـرقـمـي الـفـاخـر لـمـنـتـجـعـات أوروم" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">مواقع إلكترونية</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">مجموعة فنادق ومنتجعات أوروم العالمية — 2025</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">الـتـمـوضـع الـرقـمـي الـفـاخـر لـمـنـتـجـعـات أوروم</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">بناء وتطوير واجهات ونظام الحجز الرقمي المستدام للهواتف المحمولة والتابلت لمنتجعات أوروم؛ المصمم بخصوصية جمالية ونسب صامتة تحاكي المساحات السلبية المريحة للعين.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 7: Zaryab -->
+          <div class="work-card col-span-1 md:col-span-2 lg:col-span-8 group relative cursor-pointer transition-all duration-500" data-id="zaryab" data-category="visual-identity">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/zaryab_identity_1.png" alt="إحـيـاء هـويـة دار زريـاب لـلـتـراث والآلات الـفـنـيـة" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">الهوية البصرية واللوجو</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">دار زرياب للمقتنيات والتحف والموسيقى — 2024</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">إحـيـاء هـويـة دار زريـاب لـلـتـراث والآلات الـفـنـيـة</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">إعادة صياغة الهوية الحروفية الفنية واللوجو المطور المطعم بذهب المعماريين لعلامة زرياب، من أجل حيازة فخامة السرد التاريخي وبناء دليل تغليف وتعبئة مادي.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 8: Thuraya -->
+          <div class="work-card col-span-1 md:col-span-1 lg:col-span-4 group relative cursor-pointer transition-all duration-500" data-id="thuraya" data-category="visual-identity">
+            <div class="relative h-[320px] md:h-[420px] rounded-2xl overflow-hidden bg-[#051613] border border-[#C8A053]/15 shadow-xl gold-foil-border hover:border-[#C8A053]/30 transition-all duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-[#051613]/30 to-transparent z-10 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="images/thuraya_jewelry_brand_1.png" alt="تـأصـيـل بدائـل الـعـلامـة لـمـجـوهـرات ثـريـا الـراقـيـة" class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" referrerPolicy="no-referrer" / loading="lazy">
+              <div class="absolute top-5 left-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="bg-[#C8A053] text-[#051613] p-2.5 rounded-full shadow-lg">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="absolute top-5 right-5 z-20 bg-[#051613]/90 border border-[#C8A053]/25 text-[#C8A053] px-3.5 py-1.5 rounded-full text-[10px] uppercase font-mono font-bold shadow-md tracking-wider">الهوية البصرية واللوجو</div>
+              <div class="absolute bottom-6 left-6 right-6 lg:bottom-8 lg:left-8 lg:right-8 z-20 text-right">
+                <span class="block text-[10px] text-[#C8A053] font-mono tracking-widest uppercase mb-1.5 font-semibold">دار ثريا للمجوهرات الفاخرة — 2025</span>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-bold text-[#F7F1E5] tracking-wide group-hover:text-[#C8A053] transition-colors duration-300 leading-tight">تـأصـيـل بدائـل الـعـلامـة لـمـجـوهـرات ثـريـا الـراقـيـة</h3>
+                <p class="text-xs md:text-sm text-[#F7F1E5]/70 mt-2 max-w-2xl line-clamp-2 leading-relaxed">تصميم وبنية لوجو ونظام تعبئة مخملية فاخرة مرصعة بطلاء الذهب لبراند ثريا السويسري في جنيف ودمشق، عاكسةً الدقة المطلقة.</p>
+                <div class="mt-4 flex justify-end">
+                  <span class="text-[10px] md:text-xs text-[#C8A053] font-bold tracking-wider flex items-center gap-1.5 group-hover:underline">
+                    <span>عرض الفلسفة المعمارية للهوية</span>
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Immersive Lightbox Modal container (controlled by script.js) -->
+      <div id="work-lightbox" class="fixed inset-0 z-50 bg-[#051613]/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <!-- Click outside background close -->
+        <div id="lightbox-bg-close" class="absolute inset-0 cursor-pointer"></div>
+
+        <!-- Lightbox Content card -->
+        <div class="relative w-full max-w-4xl bg-[#051613] border border-[#C8A053]/30 rounded-2xl overflow-hidden shadow-2xl z-10 grid grid-cols-1 md:grid-cols-12 gap-0 transform scale-95 transition-transform duration-300">
+          
+          <!-- Image Column (Left on Desktop, Top on Mobile) -->
+          <div class="md:col-span-6 relative h-64 md:h-[500px] bg-black">
+            <img id="lightbox-image" src="" alt="" class="w-full h-full object-cover" referrerPolicy="no-referrer" / loading="lazy">
+            <div id="lightbox-category" class="absolute top-4 right-4 bg-[#051613]/90 border border-[#C8A053]/25 px-3 py-1 rounded-full text-xs text-[#C8A053] font-bold">Category</div>
+          </div>
+
+          <!-- Text Column (Right on Desktop, Bottom on Mobile) -->
+          <div class="md:col-span-6 p-6 md:p-8 flex flex-col justify-between text-right overflow-y-auto max-h-[500px] md:max-h-none">
+            <!-- Close icon button -->
+            <button id="lightbox-close" class="absolute top-4 left-4 p-2 rounded-full bg-[#0E4027]/50 border border-[#C8A053]/25 text-[#C8A053] hover:bg-[#C8A053] hover:text-[#051613] transition-all duration-300 cursor-pointer">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="space-y-6 pt-4">
+              <div>
+                <span id="lightbox-category-spaced" class="block text-xs text-[#C8A053] tracking-widest uppercase font-mono mb-2">صالة المخرجات / </span>
+                <h3 id="lightbox-title" class="text-2xl font-bold tracking-tight text-[#F7F1E5]">Project Title</h3>
+              </div>
+
+              <!-- Metadata info -->
+              <div class="grid grid-cols-2 gap-4 border-y border-[#C8A053]/10 py-4 text-xs">
+                <div class="space-y-1">
+                  <span class="text-[#C8A053]/70 block font-bold">شريك النجاح / العميل</span>
+                  <div class="flex items-center gap-1.5 justify-end text-[#F7F1E5]/95">
+                    <span id="lightbox-client">Client Name</span>
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-[#C8A053]"></i>
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <span class="text-[#C8A053]/70 block font-bold">عام التأسيس</span>
+                  <div class="flex items-center gap-1.5 justify-end text-[#F7F1E5]/95 font-mono">
+                    <span id="lightbox-year">2025</span>
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#C8A053]"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Desc text -->
+              <div>
+                <span class="block text-xs font-bold text-[#C8A053] mb-2 font-mono uppercase">الوصف الإبداعي</span>
+                <p id="lightbox-desc" class="text-xs text-[#F7F1E5]/80 leading-relaxed text-justify">Detailed descriptions goes here...</p>
+              </div>
+
+              <!-- Architectural Philosophy box -->
+              <div class="bg-[#0E4027]/25 border border-[#C8A053]/15 p-4 rounded-xl">
+                <span class="text-[#C8A053] font-bold text-xs flex items-center gap-1.5 justify-end mb-2">
+                  <span>الفلسفة الهندسية لتصميم الهوية</span>
+                  <i data-lucide="compass" class="w-4 h-4"></i>
+                </span>
+                <p id="lightbox-philosophy" class="text-xs text-[#F7F1E5]/90 leading-relaxed text-justify">Philosophy content...</p>
+              </div>
+
+            </div>
+
+            <div class="mt-8">
+              <button id="lightbox-close-bottom" class="w-full py-2.5 text-center rounded-lg border border-[#C8A053]/30 text-xs font-bold text-[#C8A053] hover:bg-[#C8A053]/10 transition-all duration-300 cursor-pointer">السفر إلى المعرض السابق</button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Decorative Golden Line Divider -->
+    <div class="w-full flex justify-center py-2 bg-[#051613]">
+      <div class="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#C8A053]/15 to-transparent"></div>
+    </div>
+
+    <!-- About Philosophy Storytelling Section -->
+    <section id="about" class="relative py-28 bg-[#051613]">
+      <div class="absolute top-[30%] left-[5%] w-[450px] h-[450px] rounded-full bg-[#0E4027]/10 filter blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        
+        <!-- Story section grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-24">
+          
+          <!-- Column 1: Image Overlay Frame -->
+          <div class="lg:col-span-5 relative">
+            <div class="relative aspect-[4/5] rounded-2xl overflow-hidden border border-[#C8A053]/25 gold-foil-border shadow-2xl bg-[#051613]">
+              <div class="absolute inset-0 bg-[#0E4027]/20 mix-blend-color z-10"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#051613] via-transparent to-transparent z-10"></div>
+              <img src="images/ASRAD-3.png" alt="أسراد - فلسفة التصميم المعماري" class="w-full h-full object-cover" referrerPolicy="no-referrer" / loading="lazy">
+              
+              <div class="absolute bottom-6 left-6 right-6 z-20 bg-[#051613]/90 backdrop-blur-md p-5 rounded-xl border border-[#C8A053]/15">
+                <span class="text-[10px] uppercase tracking-widest text-[#C8A053] font-mono block mb-1">شعارنا الخالد / THE MOTTO</span>
+                <p class="text-sm font-bold text-[#F7F1E5] italic leading-relaxed text-right">"التصميم الجيد يُشيد ليعيش؛ كالعمارة تماماً تمنح المكان روحه الخالدة."</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Story Texts -->
+          <div class="lg:col-span-7 text-right">
+            <span class="font-cinzel text-xs font-bold tracking-[0.3em] text-[#C8A053] block uppercase mb-3">THE PHILOSOPHY — قِصَّتُنا وَمَنْهَجُنَا العَمِيق</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-6">قصتنا وأسلوبنا الهندسي في تصميم الهويات</h2>
+            <div class="w-16 h-[2px] bg-[#C8A053] mb-8"></div>
+            <p class="text-[#F7F1E5]/90 text-justify leading-relaxed mb-6 font-sans text-base">
+              أسراد ليس مجرد استوديو تصميم عادي؛ نحن نمثل التقاء الفن المعماري الكلاسيكي بالتكنولوجيا الحركية المعاصرة. انطلقنا برؤية حالمة تؤمن بأن الهوية التجارية هي "بنية فكرية حية" تتصل بالجمهور عاطفياً ومادياً. نحن نقوم بدراسة الجوهر التاريخي والجغرافي لعلاقاتك وسياق علامتك ونصيغ لها أبعاداً تجعل حضورها راسخاً ونامياً.
+            </p>
+            <p class="text-[#F7F1E5]/70 text-justify leading-relaxed mb-10 text-sm">
+              كل منحنى في الشعار، وكل تباين في لوحة الألوان، وكل تفصيل برمي يحكمه كود "المعدن الذهبي والظلال المعمارية" الذي يفرز الأصالة الكلاسيكية دون أن يفقد نبض الحداثة المعاصرة. نحن فخورون بالمساهمة في بناء الهوية البصرية لرواد الأعمال والعلامات التجارية الكبرى في المملكة العربية السعودية والمنطقة بروح تواكب رؤية المستقبل.
+            </p>
+
+            <!-- Grid values list -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-right">
+              
+              <!-- Value 1 -->
+              <div class="p-5 rounded-xl bg-[#0E4027]/10 border border-[#C8A053]/10 hover:border-[#C8A053]/25 transition-all duration-300">
+                <div class="flex items-center gap-3 justify-end mb-3">
+                  <span class="text-sm font-bold text-[#F7F1E5]">المنهج الهندسي للهوية</span>
+                  <div class="p-2 bg-[#0E4027]/40 border border-[#C8A053]/15 rounded-lg">
+                    <i data-lucide="compass" class="w-4 h-4 text-[#C8A053]"></i>
+                  </div>
+                </div>
+                <p class="text-xs text-[#F7F1E5]/60 leading-relaxed text-justify">ندرس هويتك البصرية كشكل معماري؛ نبسط الكتل ونعزز المساحات السلبية ونستند دائمًا إلى نِسَب متسقة ومتوازنة هندسياً.</p>
+              </div>
+
+              <!-- Value 2 -->
+              <div class="p-5 rounded-xl bg-[#0E4027]/10 border border-[#C8A053]/10 hover:border-[#C8A053]/25 transition-all duration-300">
+                <div class="flex items-center gap-3 justify-end mb-3">
+                  <span class="text-sm font-bold text-[#F7F1E5]">الصمت البصري الفاخر</span>
+                  <div class="p-2 bg-[#0E4027]/40 border border-[#C8A053]/15 rounded-lg">
+                    <i data-lucide="eye" class="w-4 h-4 text-[#C8A053]"></i>
+                  </div>
+                </div>
+                <p class="text-xs text-[#F7F1E5]/60 leading-relaxed text-justify">نؤمن أن الفخامة الحقيقية لا تصرخ بصخب؛ بل تكشف عن نفسها بهدوء تام عبر دقة الأبعاد وقوة الرسائل الكامنة وراء التفاصيل.</p>
+              </div>
+
+              <!-- Value 3 -->
+              <div class="p-5 rounded-xl bg-[#0E4027]/10 border border-[#C8A053]/10 hover:border-[#C8A053]/25 transition-all duration-300">
+                <div class="flex items-center gap-3 justify-end mb-3">
+                  <span class="text-sm font-bold text-[#F7F1E5]">الخلود والاستدامة</span>
+                  <div class="p-2 bg-[#0E4027]/40 border border-[#C8A053]/15 rounded-lg">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-[#C8A053]"></i>
+                  </div>
+                </div>
+                <p class="text-xs text-[#F7F1E5]/60 leading-relaxed text-justify">لا نخضع لصيحات الموضة السريعة؛ بل نبتكر صيغاً تصميمية وهويات تدوم لعقود ممتدة، راسخة في الأناقة ومقاومة لتقلب الزمن.</p>
+              </div>
+
+              <!-- Value 4 -->
+              <div class="p-5 rounded-xl bg-[#0E4027]/10 border border-[#C8A053]/10 hover:border-[#C8A053]/25 transition-all duration-300">
+                <div class="flex items-center gap-3 justify-end mb-3">
+                  <span class="text-sm font-bold text-[#F7F1E5]">الشراكة الحصرية</span>
+                  <div class="p-2 bg-[#0E4027]/40 border border-[#C8A053]/15 rounded-lg">
+                    <i data-lucide="heart" class="w-4 h-4 text-[#C8A053]"></i>
+                  </div>
+                </div>
+                <p class="text-xs text-[#F7F1E5]/60 leading-relaxed text-justify">نتعامل مع عدد منتقى من العملاء كل ربع سنة، لضمان أعلى مستويات التركيز والتوجيه المباشر بنسبة ١ إلى ١ لمشروعك.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Leader Testimonials Section -->
+        <div class="border-t border-[#C8A053]/15 pt-20">
+          <div class="text-center mb-12 reveal-item">
+            <span class="font-cinzel text-xs font-bold tracking-[0.3em] text-[#C8A053] block uppercase mb-3">TRUSTED BY LEADERS — قَالُوا عَنْ أسراد</span>
+            <h3 class="text-2xl font-bold">شركاؤنا في فضاء التميز</h3>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Testimonial 1 -->
+            <div class="relative bg-[#051613] border border-[#C8A053]/15 rounded-2xl p-8 shadow-xl gold-foil-border text-right hover:border-[#C8A053]/30 transition-colors duration-300 reveal-scale testimonial-card">
+              <div class="absolute top-6 left-6 text-[#C8A053]/15">
+                <i data-lucide="quote" class="w-12 h-12 transform -scale-x-100"></i>
+              </div>
+              <p class="text-sm text-[#F7F1E5]/80 italic leading-relaxed text-justify mb-6 relative z-10">
+                "أسراد لم يصمموا لنا شعاراً فحسب، بل شيدوا لعلامتنا التجارية معلماً رقمياً وبصرياً فريداً من نوعه. إن دقة اهتمامهم بالتفاصيل الهندسية والذوق المعماري هو قيمة نعتز بها."
+              </p>
+              <div class="flex items-center gap-3 justify-end border-t border-[#C8A053]/10 pt-4 mt-auto">
+                <div class="text-right">
+                  <span class="block text-xs font-bold text-[#C8A053]">المهندس طارق الرويلي</span>
+                  <span class="block text-[10px] text-[#F7F1E5]/50 mt-0.5">الرئيس التنفيذي — الروضة العقارية</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="relative bg-[#051613] border border-[#C8A053]/15 rounded-2xl p-8 shadow-xl gold-foil-border text-right hover:border-[#C8A053]/30 transition-colors duration-300 reveal-scale testimonial-card">
+              <div class="absolute top-6 left-6 text-[#C8A053]/15">
+                <i data-lucide="quote" class="w-12 h-12 transform -scale-x-100"></i>
+              </div>
+              <p class="text-sm text-[#F7F1E5]/80 italic leading-relaxed text-justify mb-6 relative z-10">
+                "مستوى مذهل من الأناقة والتنظيم الفكري. لم نشهد فريقاً يعمل بهذا الرقي والتفهم العميق لمتطلبات الرفاهية المعاصرة."
+              </p>
+              <div class="flex items-center gap-3 justify-end border-t border-[#C8A053]/10 pt-4 mt-auto">
+                <div class="text-right">
+                  <span class="block text-xs font-bold text-[#C8A053]">الأستاذة ميساء الماجد</span>
+                  <span class="block text-[10px] text-[#F7F1E5]/50 mt-0.5">مديرة التوجيه الفني — ميلان للعطور</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 3: ASRAD Client -->
+            <div class="relative bg-[#051613] border border-[#C8A053]/15 rounded-2xl p-8 shadow-xl gold-foil-border text-right hover:border-[#C8A053]/30 transition-colors duration-300 reveal-scale testimonial-card">
+              <div class="absolute top-6 left-6 text-[#C8A053]/15">
+                <i data-lucide="quote" class="w-12 h-12 transform -scale-x-100"></i>
+              </div>
+              <p class="text-sm text-[#F7F1E5]/80 italic leading-relaxed text-justify mb-6 relative z-10">
+                "تعاملنا مع أسراد لتصميم هوية بصرية كاملة لعلامتنا التجارية الناشئة. النتيجة كانت أبعد من توقعاتنا — شعار يحمل قصة، وألوان تتحدث، وهوية تُشعرك بالفخامة من أول نظرة."
+              </p>
+              <div class="flex items-center gap-3 justify-end border-t border-[#C8A053]/10 pt-4 mt-auto">
+                <div class="text-right">
+                  <span class="block text-xs font-bold text-[#C8A053]">المهندس سامر القاضي</span>
+                  <span class="block text-[10px] text-[#F7F1E5]/50 mt-0.5">المؤسس والرئيس التنفيذي — دار زرياب للتراث</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 4: ASRAD Client -->
+            <div class="relative bg-[#051613] border border-[#C8A053]/15 rounded-2xl p-8 shadow-xl gold-foil-border text-right hover:border-[#C8A053]/30 transition-colors duration-300 reveal-scale testimonial-card">
+              <div class="absolute top-6 left-6 text-[#C8A053]/15">
+                <i data-lucide="quote" class="w-12 h-12 transform -scale-x-100"></i>
+              </div>
+              <p class="text-sm text-[#F7F1E5]/80 italic leading-relaxed text-justify mb-6 relative z-10">
+                "الموقع الإلكتروني الذي صممه أسراد لمنتجعاتنا لم يكن مجرد واجهة رقمية، بل كان تجربة ضيافة افتراضية تعكس فلسفة العلامة. كل تفصيل يُحكى قصة، وكل زاوية تُشعرك بالرقي."
+              </p>
+              <div class="flex items-center gap-3 justify-end border-t border-[#C8A053]/10 pt-4 mt-auto">
+                <div class="text-right">
+                  <span class="block text-xs font-bold text-[#C8A053]">السيدة ليلى بن محفوظ</span>
+                  <span class="block text-[10px] text-[#F7F1E5]/50 mt-0.5">مديرة التسويق — مجموعة فنادق ومنتجعات أوروم</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Interactive Lead Generation Contact Section -->
+    <section id="contact" class="relative py-28 bg-[#051613]">
+      <div class="absolute inset-x-0 bottom-0 top-0 bg-gold-radial opacity-15 pointer-events-none"></div>
+      <div class="absolute bottom-[20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#0E4027]/15 filter blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        
+        <!-- Header title contact -->
+        <div class="text-center mb-20">
+          <span class="font-cinzel text-xs font-bold tracking-[0.3em] text-[#C8A053] block uppercase mb-3 reveal">INITIATE CONVERSATION — تَوَاصَلْ مَعَنَا الآن</span>
+          <h2 class="text-3xl md:text-5xl font-bold tracking-tight">لتبدأ قصتك الفريدة من هنا</h2>
+          <div class="w-16 h-[2px] bg-[#C8A053] mx-auto mt-4"></div>
+          <p class="text-sm text-[#F7F1E5]/60 mt-4 max-w-xl mx-auto">يسعدنا مناقشة تفاصيل مشروعك القادم وتأصيل هويتك البصرية، املأ بياناتك وموجز رؤيتك وسيتواصل معك مهندسو الهويات لدينا خلال ٢٤ ساعة.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          <!-- Column 1: Channels list Cards -->
+          <div class="lg:col-span-5 flex flex-col gap-8">
+            <div class="bg-[#0E4027]/15 rounded-2xl p-6 md:p-8 border border-[#C8A053]/15 gold-foil-border text-right space-y-6">
+              <h3 class="text-lg font-bold text-[#C8A053] flex items-center gap-2 justify-end mb-4 border-b border-[#C8A053]/10 pb-3">
+                <span>قنوات التواصل الرسمية</span>
+                <i data-lucide="sparkles" class="w-4 h-4 text-[#C8A053]"></i>
+              </h3>
+
+              <!-- Channel: Phone -->
+              <a 
+                href="https://wa.me/963935878256"
+                target="_blank"
+                class="contact-channel flex items-center gap-4 hover:bg-[#0E4027]/20 p-3.5 rounded-xl transition-all duration-300 justify-end group cursor-pointer border border-transparent hover:border-[#C8A053]/10"
+              >
+                <div class="text-right">
+                  <span class="block text-[10px] text-[#C8A053] font-mono uppercase tracking-wider">الاتصال والواتساب مباشر</span>
+                  <span class="text-base text-[#F7F1E5] font-semibold font-mono" dir="ltr">+963 935 878 256</span>
+                </div>
+                <div class="logo-icon-box w-12 h-12 bg-[#051613] border border-[#C8A053]/20 rounded-xl text-[#C8A053] shrink-0">
+                  <i data-lucide="phone" class="w-5 h-5"></i>
+                </div>
+              </a>
+
+              <!-- Channel: Email -->
+              <a 
+                href="mailto:asrad901@gmail.com"
+                class="contact-channel flex items-center gap-4 hover:bg-[#0E4027]/20 p-3.5 rounded-xl transition-all duration-300 justify-end group cursor-pointer border border-transparent hover:border-[#C8A053]/10"
+              >
+                <div class="text-right">
+                  <span class="block text-[10px] text-[#C8A053] font-mono uppercase tracking-wider">مراسلة البريد الإلكتروني</span>
+                  <span class="text-base text-[#F7F1E5] font-semibold font-mono">asrad901@gmail.com</span>
+                </div>
+                <div class="logo-icon-box w-12 h-12 bg-[#051613] border border-[#C8A053]/20 rounded-xl text-[#C8A053] shrink-0">
+                  <i data-lucide="mail" class="w-5 h-5"></i>
+                </div>
+              </a>
+
+              <!-- Channel: Instagram — SVG Icon centered -->
+              <a 
+                href="https://www.instagram.com/asradofficial?igsh=eXlieG5jMTJvZGMy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="contact-channel flex items-center gap-4 hover:bg-[#0E4027]/20 p-3.5 rounded-xl transition-all duration-300 justify-end group cursor-pointer border border-transparent hover:border-[#C8A053]/10"
+              >
+                <div class="text-right">
+                  <span class="block text-[10px] text-[#C8A053] font-mono uppercase tracking-wider">الحساب الرسمي على إنستغرام</span>
+                  <span class="text-base text-[#F7F1E5] font-semibold font-mono">@asradofficial</span>
+                </div>
+                <div class="logo-icon-box w-12 h-12 bg-[#051613] border border-[#C8A053]/20 rounded-xl text-[#C8A053] shrink-0">
+                  <!-- Instagram SVG Icon -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="instagram-icon">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Column 2: Elegant Form -->
+          <div class="lg:col-span-7">
+            <div class="bg-[#0E4027]/10 p-6 md:p-10 rounded-2xl border border-[#C8A053]/15 shadow-xl relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#C8A053]/50 to-transparent"></div>
+              
+              <form id="contact-form" class="space-y-6 text-right">
+                
+                <!-- Row 1: Name & Phone -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Phone -->
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold text-[#F7F1E5]/75 uppercase">رقم الهاتف أو الواتساب</label>
+                    <input 
+                      id="form-phone"
+                      type="tel"
+                      required
+                      placeholder="05xxxxxxx"
+                      class="w-full bg-[#051613] border border-[#C8A053]/15 focus:border-[#C8A053] text-[#F7F1E5] placeholder-[#F7F1E5]/30 rounded-xl py-3 px-4 text-xs focus:outline-none transition-colors duration-300 text-left font-mono"
+                    />
+                  </div>
+                  <!-- Name -->
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold text-[#F7F1E5]/75 uppercase">الاسم أو اسم المنشأة / الشركة</label>
+                    <input 
+                      id="form-name"
+                      type="text"
+                      required
+                      placeholder="مثال: شركة ميلان الراقية"
+                      class="w-full bg-[#051613] border border-[#C8A053]/15 focus:border-[#C8A053] text-[#F7F1E5] placeholder-[#F7F1E5]/30 rounded-xl py-3 px-4 text-xs focus:outline-none transition-colors duration-300"
+                    />
+                  </div>
+                </div>
+
+                <!-- Honeypot field (hidden from humans, bots fill it) -->
+                <div class="space-y-2" style="position: absolute; left: -9999px; opacity: 0;">
+                  <label class="block text-xs font-bold text-[#F7F1E5]/75 uppercase">Website</label>
+                  <input 
+                    id="form-website"
+                    type="text"
+                    tabindex="-1"
+                    autocomplete="off"
+                    placeholder="Leave this empty"
+                    class="w-full"
+                  />
+                </div>
+
+                <!-- Row 2: Mail & Service -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Email -->
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold text-[#F7F1E5]/75 uppercase">البريد الإلكتروني</label>
+                    <input 
+                      id="form-email"
+                      type="email"
+                      required
+                      placeholder="client@company.com"
+                      class="w-full bg-[#051613] border border-[#C8A053]/15 focus:border-[#C8A053] text-[#F7F1E5] placeholder-[#F7F1E5]/30 rounded-xl py-3 px-4 text-xs focus:outline-none transition-colors duration-300 text-left font-mono"
+                    />
+                  </div>
+                  <!-- Service select option -->
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold text-[#F7F1E5]/75 uppercase">الخدمة المطلوبة</label>
+                    <select 
+                      id="form-service"
+                      class="w-full bg-[#051613] border border-[#C8A053]/15 focus:border-[#C8A053] text-[#F7F1E5] rounded-xl py-3 px-4 text-xs focus:outline-none transition-colors duration-300 text-right"
+                    >
+                      <option value="visual-identity">الهوية البصرية والمفاهيم الإبداعية</option>
+                      <option value="web-development">تصميم وتطوير المواقع الفاخرة</option>
+                      <option value="creative-ads">الحملات والإعلانات الإبداعية</option>
+                      <option value="digital-content">صناعة المحتوى الرقمي الفاخر</option>
+                      <option value="social-media">إدارة وتنسيق قنوات التواصل الاجتماعي</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Budget options -->
+                <div class="space-y-2">
+                  <label class="block text-xs font-bold text-[#F7F1E5]/75 uppercase mb-2">الميزانية التقديرية للاستثمار (USD)</label>
+                  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="budget-options-container">
+                    <button type="button" class="budget-opt-btn py-3 px-4 rounded-xl text-center text-xs font-medium border transition-all duration-300 cursor-pointer bg-[#051613] border-[#C8A053]/10 text-[#F7F1E5]/70" data-budget="premium">3,000$ (باقة التأسيس)</button>
+                    <button type="button" class="budget-opt-btn py-3 px-4 rounded-xl text-center text-xs font-medium border transition-all duration-300 cursor-pointer bg-[#051613] border-[#C8A053]/10 text-[#F7F1E5]/70" data-budget="exclusive">5,000$ (باقة التموضع الرقمي)</button>
+                    <button type="button" class="budget-opt-btn py-3 px-4 rounded-xl text-center text-xs font-medium border transition-all duration-300 cursor-pointer bg-[#051613] border-[#C8A053]/10 text-[#F7F1E5]/70" data-budget="elite">7,000$ (الباقة الشاملة)</button>
+                    <button type="button" class="budget-opt-btn py-3 px-4 rounded-xl text-center text-xs font-bold border transition-all duration-300 cursor-pointer bg-[#C8A053] text-[#051613] border-[#C8A053] shadow-md shadow-[#C8A053]/10" data-budget="bespoke">10,000$+ (باقة المعماري المطلق)</button>
+                  </div>
+                </div>
+
+                <!-- Brief Message -->
+                <div class="space-y-2">
+                  <label class="block text-xs font-bold text-[#F7F1E5]/75 uppercase">أخبرنا عن رؤيتك وأهداف علامتك التجارية</label>
+                  <textarea 
+                    id="form-message"
+                    rows="4"
+                    required
+                    placeholder="اكتب نبذة مختصرة عن توجه مشروعك وما تطمح إلى تشييده من خلال أسراد..."
+                    class="w-full bg-[#051613] border border-[#C8A053]/15 focus:border-[#C8A053] text-[#F7F1E5] placeholder-[#F7F1E5]/30 rounded-xl py-3 px-4 text-xs focus:outline-none transition-colors duration-300 resize-none leading-relaxed"
+                  ></textarea>
+                </div>
+
+                <!-- Submit and Success States -->
+                <div class="pt-4 relative">
+                  
+                  <!-- Success Box (Initially hidden) -->
+                  <div id="form-success-box" class="hidden mb-4 bg-[#0E4027]/80 border border-emerald-500/30 p-4 rounded-xl text-right text-[#F7F1E5] flex items-center justify-between transition-all duration-300">
+                    <div class="flex items-center gap-2.5">
+                      <div class="p-1 bg-emerald-500 rounded-full text-black flex items-center justify-center">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                      </div>
+                      <div>
+                        <span class="block text-xs font-bold text-emerald-400">تم استقبال تطلعك الإبداعي بنجاح!</span>
+                        <span class="block text-[10px] text-[#F7F1E5]/80 mt-0.5">سيقوم مهندسو الهويات والمصممات بالتواصل معك هاتفياً وبريدياً في الغد.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    id="form-submit-btn"
+                    class="w-full py-4 rounded-xl font-extrabold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden cursor-pointer bg-gradient-to-r from-[#C8A053] to-[#EAD093] text-[#051613] hover:brightness-105 shadow-xl shadow-[#C8A053]/10"
+                  >
+                    <span id="submit-text-label">أرسل موجز الهوية لتبدأ مشروعك</span>
+                    <span id="submit-icon-wrapper" class="flex items-center"><i data-lucide="send" class="w-4 h-4"></i></span>
+                  </button>
+                  <p class="text-[10px] text-[#F7F1E5]/40 text-center mt-3 font-mono">يتم إرسال بياناتك مباشرة إلى مهندسي الهويات في أسراد</p>
+
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer Branding coordinates Section -->
+    <footer id="footer" class="bg-[#051613] border-t border-[#C8A053]/15 pt-20 pb-8 text-right relative overflow-hidden">
+      <!-- Background mesh glow -->
+      <div class="absolute inset-x-0 bottom-0 h-[200px] bg-gold-radial opacity-20 pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        
+        <!-- Upper grid layout -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16 items-start">
+          
+          <!-- Category 1: Brand Concept -->
+          <div class="md:col-span-5 space-y-6 reveal-item">
+            <div class="flex items-center gap-4 justify-start">
+              <div class="flex items-center gap-3 select-none">
+                <svg 
+                  class="w-14 h-14 filter drop-shadow-[0_0_6px_rgba(200,160,83,0.15)]"
+                  viewBox="0 0 500 500" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="250" cy="250" r="235" fill="#031A15" stroke="#C8A053" stroke-width="2" />
+                  <circle cx="250" cy="250" r="215" stroke="#C8A053" stroke-width="1.5" stroke-opacity="0.6" stroke-dasharray="4 2" />
+                  <circle cx="250" cy="250" r="210" stroke="#C8A053" stroke-width="1" stroke-opacity="0.8" />
+                  <text x="248" y="225" text-anchor="middle" fill="#F7F1E5" font-size="145" font-family="'Cinzel', 'Playfair Display', serif" font-weight="600" letter-spacing="-12">RA</text>
+                  <line x1="140" y1="288" x2="225" y2="288" stroke="#C8A053" stroke-width="1.5" stroke-opacity="0.8" />
+                  <line x1="275" y1="288" x2="360" y2="288" stroke="#C8A053" stroke-width="1.5" stroke-opacity="0.8" />
+                  <path d="M 250 268 L 242 280 H 246 L 239 294 H 247 L 235 311 H 247 V 323 H 253 V 311 H 265 L 253 294 H 261 L 254 280 H 258 Z" fill="#F7F1E5" />
+                  <text x="256" y="378" text-anchor="middle" fill="#F7F1E5" font-size="48" font-family="'Cinzel', 'Playfair Display', serif" font-weight="700" letter-spacing="16">ASRAD</text>
+                  <text x="254" y="423" text-anchor="middle" fill="#C8A053" font-size="15" font-family="'Tajawal', sans-serif" font-weight="600" letter-spacing="8">ROOTED IN ELEGANCE</text>
+                </svg>
+                <div class="flex flex-col text-right">
+                  <span class="font-cinzel text-lg md:text-xl font-bold tracking-[0.2em] uppercase text-gradient leading-none text-[#C8A053]">ASRAD</span>
+                  <span class="text-[8px] tracking-[0.35em] uppercase text-[#C8A053]/90 font-mono mt-1">Rooted in Elegance</span>
+                </div>
+              </div>
+            </div>
+            
+            <p class="text-xs text-[#F7F1E5]/70 leading-relaxed max-w-sm">أسراد هو استوديو سوري منتقى لتصميم وتأصيل الهويات والمنصات الفاخرة للكيانات التي تسعى للتميز والرسوخ الأبدي.</p>
+
+            <div class="flex gap-3 justify-end">
+              <a 
+                href="https://www.instagram.com/asradofficial?igsh=eXlieG5jMTJvZGMy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-10 h-10 rounded-full bg-[#0E4027]/10 border border-[#C8A053]/15 text-[#C8A053] hover:bg-[#C8A053] hover:text-[#051613] hover:scale-105 transition-all duration-300 flex items-center justify-center"
+                aria-label="إنستغرام"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Category 2: Navigations Links -->
+          <div class="md:col-span-3 space-y-4 reveal-item">
+            <span class="text-xs font-bold text-[#C8A053] uppercase tracking-wider block border-r-2 border-[#C8A053] pr-2.5">الإبحار الروحي للمنشأة</span>
+            <ul class="space-y-3.5 text-xs text-[#F7F1E5]/75">
+              <li><a href="#hero" class="hover:text-[#C8A053] transition-colors duration-300">الرئيسية والتقديم</a></li>
+              <li><a href="#services" class="hover:text-[#C8A053] transition-colors duration-300">الخدمات وتوجيهات الفنون</a></li>
+              <li><a href="#works" class="hover:text-[#C8A053] transition-colors duration-300">المعرض الإمبراطوري للمخرجات</a></li>
+              <li><a href="#about" class="hover:text-[#C8A053] transition-colors duration-300">فلسفتنا وقصتنا الهندسية</a></li>
+              <li><a href="#contact" class="hover:text-[#C8A053] transition-colors duration-300">شروع في التأسيس / تواصل معنا</a></li>
+            </ul>
+          </div>
+
+          <!-- Category 3: Coordinates contacts -->
+          <div class="md:col-span-4 space-y-4 reveal-item">
+            <span class="text-xs font-bold text-[#C8A053] uppercase tracking-wider block border-r-2 border-[#C8A053] pr-2.5">تفاصيل التمركز والتواصل</span>
+            
+            <div class="space-y-4 text-xs">
+              <div class="flex items-start gap-2.5 justify-end">
+                <span class="text-[#F7F1E5]/75 font-sans block max-w-xs text-right">الجمهورية العربية السورية، دمشق — حي أبو رمانة الفاخر / المنطقة الإبداعية</span>
+                <i data-lucide="map-pin" class="w-4 h-4 text-[#C8A053] shrink-0 mt-0.5"></i>
+              </div>
+              
+              <div class="flex items-center gap-2.5 justify-end">
+                <a href="tel:+963935878256" class="text-[#F7F1E5]/75 hover:text-[#C8A053] font-mono" dir="ltr">+963 935 878 256</a>
+                <i data-lucide="phone" class="w-4 h-4 text-[#C8A053] shrink-0"></i>
+              </div>
+
+              <div class="flex items-center gap-2.5 justify-end">
+                <a href="mailto:asrad901@gmail.com" class="text-[#F7F1E5]/75 hover:text-[#C8A053] font-mono">asrad901@gmail.com</a>
+                <i data-lucide="mail" class="w-4 h-4 text-[#C8A053] shrink-0"></i>
+              </div>
+            </div>
+
+            <!-- Copyright claims -->
+            <div class="pt-2 flex items-center gap-2 justify-end text-[10px] text-[#C8A053]/80">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>جميع الحقوق محفوظة لصالح أسراد © <span id="footer-year">2026</span></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Lower bar coordinates -->
+        <div class="border-t border-[#C8A053]/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-[#F7F1E5]/40 font-mono">
+          <div>
+            <span>صمم بشغف وروح فريدة لمستقبل الرسوخ والأناقة</span>
+          </div>
+
+          <!-- Back to top button -->
+          <button
+            id="footer-back-to-top"
+            class="flex items-center gap-2 px-4 py-2 rounded-full border border-[#C8A053]/15 text-[#C8A053] hover:bg-[#C8A053] hover:text-[#051613] hover:border-[#C8A053] transition-all duration-300 cursor-pointer"
+            aria-label="Back to top"
+          >
+            <span>العودة للأعلى</span>
+            <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+      </div>
+    </footer>
+
+    <!-- Lucide Dynamic Icons Library CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Enhanced Interactive JS -->
+    <script src="script.js"></script>
+  </body>
+</html>
